@@ -2,8 +2,7 @@ import useSWR from 'swr';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Container } from '../components/Container';
-
-const fetcher = url => fetch(url).then(res => res.json());
+import fetcher from '../utils/fetcher';
 
 export async function getServerSideProps() {
   const helloData = await fetcher('http://localhost:3000/api/hello');

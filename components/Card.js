@@ -62,7 +62,7 @@ export default DropTarget(
         return
       }
       // Time to actually perform the action
-      props.moveCard(dragIndex, hoverIndex)
+      props.moveCard(monitor.getItem().id, props.id)
       // Note: we're mutating the monitor item here!
       // Generally it's better to avoid mutations,
       // but it's good here for the sake of performance

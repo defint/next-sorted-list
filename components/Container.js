@@ -1,61 +1,53 @@
-import React, { useState } from 'react'
-import Card from './Card'
+import React, { useState } from "react";
+import useSWR from "swr";
+import fetcher from "../utils/fetcher";
+import Card from "./Card";
 
-const style = {
-  width: 400,
-}
-export const Container = () => {
-  {
-    const [cards, setCards] = useState([
+export const Container = (props) => {
+  const [cards, setCards] = useState([]);
+
+  useSWR("http://localhost:3000/api/cards", fetcher, {
+    initialData: props.cardsData,
+    onSuccess: (data) => {
+      setCards(data);
+    },
+  });
+
+  const moveCard = (dragId, hoverId) => {
+    const dragIndex = cards.findIndex((item) => item.id === dragId);
+    const hoverIndex = cards.findIndex((item) => item.id === hoverId);
+
+    const newCards = [...cards];
+    const swap = newCards[dragIndex];
+
+    newCards[dragIndex] = newCards[hoverIndex];
+    newCards[hoverIndex] = swap;
+
+    setCards(newCards);
+
+    fetch(
+      `http://localhost:3000/api/cards?hoverId=${hoverId}&dragId=${dragId}`,
       {
-        id: 1,
-        text: 'Write a cool JS library',
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
       },
-      {
-        id: 2,
-        text: 'Make it generic enough',
-      },
-      {
-        id: 3,
-        text: 'Write README',
-      },
-      {
-        id: 4,
-        text: 'Create some examples',
-      },
-      {
-        id: 5,
-        text:
-          'Spam in Twitter and IRC to promote it (note that this element is taller than the others)',
-      },
-      {
-        id: 6,
-        text: '???',
-      },
-      {
-        id: 7,
-        text: 'PROFIT',
-      },
-    ])
-    const moveCard = (dragIndex, hoverIndex) => {
-      const dragCard = cards.splice(dragIndex, 1);
-      const newCards = [...cards.slice(0,hoverIndex), ...dragCard, ...cards.slice(hoverIndex) ];
-      setCards(
-        newCards
-      )
-    }
-    return (
-      <div style={style}>
-        {cards.map((card, i) => (
-          <Card
-            key={card.id}
-            index={i}
-            id={card.id}
-            text={card.text}
-            moveCard={moveCard}
-          />
-        ))}
-      </div>
-    )
-  }
-}
+    );
+  };
+
+  return (
+    <div>
+      {cards.map((card, i) => (
+        <Card
+          key={card.id}
+          index={i}
+          id={card.id}
+          text={card.text}
+          moveCard={moveCard}
+        />
+      ))}
+    </div>
+  );
+};
