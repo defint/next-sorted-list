@@ -4,10 +4,11 @@ import fetcher from "../utils/fetcher";
 import Card from "./Card";
 
 export const Container = (props) => {
-  const [cards, setCards] = useState([]);
+  const initialData = props.cardsData || [];
+  const [cards, setCards] = useState(initialData);
 
   useSWR("http://localhost:3000/api/cards", fetcher, {
-    initialData: props.cardsData,
+    initialData,
     onSuccess: (data) => {
       setCards(data);
     },
