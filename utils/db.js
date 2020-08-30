@@ -39,6 +39,8 @@ export const cardsList = [
 
 export const getList = () => cardsList.sort((a,b) => a.order - b.order);
 
+export const getItem = (id) => cardsList.find(item => item.id.toString() === id);
+
 export const updateOrder = (dragId, hoverId) => {
   const drag = cardsList.find(item => item.id == dragId);
   const hover = cardsList.find(item => item.id == hoverId);

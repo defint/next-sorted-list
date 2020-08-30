@@ -1,4 +1,4 @@
-import { getList, updateOrder } from "../../utils/db";
+import { getList, updateOrder } from "../../../utils/db";
 
 export default async (req, res) => {
   if (req.method === 'POST') {
